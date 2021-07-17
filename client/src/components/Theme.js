@@ -16,4 +16,17 @@ export default createTheme({
       main: `${arcOrange}`,
     },
   },
+  typography: {
+    tab: {
+      fontFamily: "Quicksand",
+      textTransform: "None",
+      fontWeight: "600",
+      fontSize: "1rem",
+    },
+    estimate: {
+      fontFamily: "Roboto",
+      fontSize: "1rem",
+      textTransform: "none",
+    },
+  },
 });
