@@ -10,6 +10,8 @@ import Tab from "@material-ui/core/Tab";
 import Tabs from "@material-ui/core/Tabs";
 import Button from "@material-ui/core/Button";
 import useScrollTrigger from "@material-ui/core/useScrollTrigger";
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
 // External function of styles
 const useStyles = makeStyles((theme) => ({
   toolbarMargin: {
@@ -41,6 +43,18 @@ const useStyles = makeStyles((theme) => ({
     marginRight: "25px",
     height: "45px",
   },
+  menu: {
+    backgroundColor: theme.palette.common.blue,
+    color: "white",
+    borderRadius: "0px",
+  },
+  menuItem: {
+    ...theme.typography.tab,
+    opacity: 0.7,
+    "&:hover": {
+      opacity: 1,
+    },
+  },
 }));
 
 // Function ElevationScroll - helps the Render to move pages
@@ -62,6 +76,8 @@ export default function Header(props) {
   const classes = useStyles();
   // UseState elements setup
   const [link, setLink] = useState(0);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [openMenu, setOpenMenu] = useState(false);
   // UseEffect elements setup
   useEffect(() => {
     if (window.location.pathname === "/" && link !== "0") {
@@ -79,6 +95,14 @@ export default function Header(props) {
     }
   }, [link]);
   // Functions of Header
+  const handleMenuClick = (event) => {
+    setAnchorEl(event.currentTarget);
+    setOpenMenu(true);
+  };
+  const handleClose = (event) => {
+    setAnchorEl(null);
+    setOpenMenu(false);
+  };
   const handleNavbarChange = (event, link) => {
     setLink(link);
   };
@@ -116,6 +140,9 @@ export default function Header(props) {
                 className={classes.tab}
                 component={Link}
                 to="/services"
+                aria-owns={anchorEl ? "simple-menu" : undefined}
+                aria-haspopup={anchorEl ? "true" : undefined}
+                onMouseOver={(event) => handleMenuClick(event)}
                 label="Services"
               />
               <Tab
@@ -146,6 +173,60 @@ export default function Header(props) {
             >
               Free Estimate
             </Button>
+            <Menu
+              id="simple-menu"
+              anchorEl={anchorEl}
+              open={openMenu}
+              onClose={handleClose}
+              classes={{ paper: classes.menu }}
+              MenuListProps={{ onMouseLeave: handleClose }}
+              elevation={0}
+            >
+              <MenuItem
+                onClick={() => {
+                  handleClose();
+                  setLink(1);
+                }}
+                component={Link}
+                to="/services"
+                classes={{ root: classes.menuItem }}
+              >
+                Services
+              </MenuItem>
+              <MenuItem
+                onClick={() => {
+                  handleClose();
+                  setLink(1);
+                }}
+                component={Link}
+                to="/customsoftware"
+                classes={{ root: classes.menuItem }}
+              >
+                Custom Software Development
+              </MenuItem>
+              <MenuItem
+                onClick={() => {
+                  handleClose();
+                  setLink(1);
+                }}
+                component={Link}
+                to="/mobileapps"
+                classes={{ root: classes.menuItem }}
+              >
+                Mobile App Development
+              </MenuItem>
+              <MenuItem
+                onClick={() => {
+                  handleClose();
+                  setLink(1);
+                }}
+                component={Link}
+                to="/websites"
+                classes={{ root: classes.menuItem }}
+              >
+                Website Development
+              </MenuItem>
+            </Menu>
           </Toolbar>
         </AppBar>
       </ElevationScroll>
