@@ -71,6 +71,14 @@ function ElevationScroll(props) {
   });
 }
 
+// Function Menu Options - Allows to use multiple elements from the list without repeating code
+const menuOptions = [
+  { name: "Services", link: "/services" },
+  { name: "Custom Software", link: "/customsoftware" },
+  { name: "Mobile Apps", link: "/mobileapps" },
+  { name: "Website Development", link: "/websites" },
+];
+// Header display of elements
 export default function Header(props) {
   // JSS classes setup
   const classes = useStyles();
@@ -78,6 +86,7 @@ export default function Header(props) {
   const [link, setLink] = useState(0);
   const [anchorEl, setAnchorEl] = useState(null);
   const [openMenu, setOpenMenu] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(0);
   // UseEffect elements setup
   useEffect(() => {
     if (window.location.pathname === "/" && link !== "0") {
@@ -93,18 +102,86 @@ export default function Header(props) {
     } else if (window.location.pathname === "/estimate" && link !== "5") {
       setLink(5);
     }
+
+    switch (window.location.pathname) {
+      case "/":
+        if (link !== "0") {
+          setLink(0);
+        }
+        break;
+
+      case "/services":
+        if (link !== "1") {
+          setLink(1);
+          setSelectedIndex(0);
+        }
+        break;
+
+      case "/customSoftware":
+        if (link !== "1") {
+          setLink(1);
+          setSelectedIndex(1);
+        }
+        break;
+      case "/mobileapps":
+        if (link !== "1") {
+          setLink(1);
+          setSelectedIndex(2);
+        }
+        break;
+
+      case "/websites":
+        if (link !== "1") {
+          setLink(1);
+          setSelectedIndex(3);
+        }
+        break;
+
+      case "/revolution":
+        if (link !== "2") {
+          setLink(2);
+        }
+        break;
+      case "/about":
+        if (link !== "3") {
+          setLink(3);
+        }
+        break;
+
+      case "/contact":
+        if (link !== "4") {
+          setLink(4);
+        }
+        break;
+      case "/estimate":
+        if (link !== "5") {
+          setLink(5);
+        }
+        break;
+
+      default:
+        break;
+    }
   }, [link]);
-  // Functions of Header
+  // Handle Menu Click - Allows the elements to select elements
   const handleMenuClick = (event) => {
     setAnchorEl(event.currentTarget);
     setOpenMenu(true);
   };
+  // Handle Close - Close Menu and Anchor elements
   const handleClose = (event) => {
     setAnchorEl(null);
     setOpenMenu(false);
   };
+  // Handle Navbar Change - Changes elements of links
   const handleNavbarChange = (event, link) => {
     setLink(link);
+  };
+  // Handle Menu Item link - Control of multiple elements in the list
+  const handleMenuItemClick = (event, index) => {
+    setAnchorEl(null);
+    setOpenMenu(false);
+    setSelectedIndex(index);
   };
   // Send HTML Render
   return (
@@ -182,50 +259,23 @@ export default function Header(props) {
               MenuListProps={{ onMouseLeave: handleClose }}
               elevation={0}
             >
-              <MenuItem
-                onClick={() => {
-                  handleClose();
-                  setLink(1);
-                }}
-                component={Link}
-                to="/services"
-                classes={{ root: classes.menuItem }}
-              >
-                Services
-              </MenuItem>
-              <MenuItem
-                onClick={() => {
-                  handleClose();
-                  setLink(1);
-                }}
-                component={Link}
-                to="/customsoftware"
-                classes={{ root: classes.menuItem }}
-              >
-                Custom Software Development
-              </MenuItem>
-              <MenuItem
-                onClick={() => {
-                  handleClose();
-                  setLink(1);
-                }}
-                component={Link}
-                to="/mobileapps"
-                classes={{ root: classes.menuItem }}
-              >
-                Mobile App Development
-              </MenuItem>
-              <MenuItem
-                onClick={() => {
-                  handleClose();
-                  setLink(1);
-                }}
-                component={Link}
-                to="/websites"
-                classes={{ root: classes.menuItem }}
-              >
-                Website Development
-              </MenuItem>
+              {menuOptions.map((option, index) => (
+                <MenuItem
+                  key={option}
+                  component={Link}
+                  to={option.link}
+                  classes={{ root: classes.menuItem }}
+                  onClick={(event) => {
+                    handleMenuItemClick(event, index);
+                    setLink(1);
+                    handleClose();
+                  }}
+                  // If index is set it is true
+                  selected={index === selectedIndex && link === 1}
+                >
+                  {option.name}
+                </MenuItem>
+              ))}
             </Menu>
           </Toolbar>
         </AppBar>

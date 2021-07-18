@@ -20,7 +20,7 @@ export default function App() {
             <Home />
           </Route>
           <Route path="/services">
-            <Others />
+            <Services />
           </Route>
           <Route path="/customsoftware">
             <Services />
